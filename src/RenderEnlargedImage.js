@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import objectAssign from 'object-assign';
@@ -8,16 +8,16 @@ export default class RenderEnlargedImage extends Component {
     static propTypes = {
         isPortalEnabledForTouch: PropTypes.bool.isRequired,
         isTouchDetected: PropTypes.bool.isRequired,
-        portalId: PropTypes.string
-    }
+        portalId: PropTypes.string,
+    };
 
-    state = { isMounted: false }
+    state = {isMounted: false};
 
     componentDidMount() {
-        this.setState({ isMounted: true });
+        this.setState({isMounted: true});
 
         if (this.isPortalRendered) {
-            const { portalId } = this.props;
+            const {portalId} = this.props;
             this.portalElement = document.getElementById(portalId);
         }
     }
@@ -29,7 +29,7 @@ export default class RenderEnlargedImage extends Component {
     get isPortalRendered() {
         const {
             isPortalEnabledForTouch,
-            isTouchDetected
+            isTouchDetected,
         } = this.props;
 
         if (!this.isPortalIdImplemented) {
@@ -55,7 +55,7 @@ export default class RenderEnlargedImage extends Component {
         return objectAssign(
             {},
             this.props,
-            { isPortalRendered: this.isPortalRendered }
+            {isPortalRendered: this.isPortalRendered},
         );
     }
 
@@ -69,7 +69,7 @@ export default class RenderEnlargedImage extends Component {
         if (this.isPortalRendered) {
             return ReactDOM.createPortal(
                 <EnlargedImage {...props} />,
-                this.portalElement
+                this.portalElement,
             );
         }
 

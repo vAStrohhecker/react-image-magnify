@@ -3,15 +3,15 @@ import PropTypes from 'prop-types';
 
 import {
     getLensModeEnlargedImageCoordinates,
-    getInPlaceEnlargedImageCoordinates
+    getInPlaceEnlargedImageCoordinates,
 } from './lib/imageCoordinates';
-import { LargeImageShape } from './prop-types/Image';
-import { ContainerDimensions } from './prop-types/EnlargedImage';
-import { noop } from './utils';
+import {LargeImageShape} from './prop-types/Image';
+import {ContainerDimensions, EnlargedImageOrientation} from './prop-types/EnlargedImage';
+import {noop} from './utils';
 import Point from './prop-types/Point';
 import {
     getEnlargedImageContainerStyle,
-    getEnlargedImageStyle
+    getEnlargedImageStyle,
 } from './lib/styles';
 
 export default class extends React.Component {
@@ -22,7 +22,7 @@ export default class extends React.Component {
             isTransitionEntering: false,
             isTransitionActive: false,
             isTransitionLeaving: false,
-            isTransitionDone: false
+            isTransitionDone: false,
         };
 
         this.timers = [];
@@ -32,7 +32,7 @@ export default class extends React.Component {
 
     static defaultProps = {
         fadeDurationInMs: 0,
-        isLazyLoaded: true
+        isLazyLoaded: true,
     };
 
     static propTypes = {
@@ -47,8 +47,9 @@ export default class extends React.Component {
         isLazyLoaded: PropTypes.bool,
         largeImage: LargeImageShape,
         containerDimensions: ContainerDimensions,
+        enlargedImageOrientation: EnlargedImageOrientation,
         isPortalRendered: PropTypes.bool,
-        isInPlaceMode: PropTypes.bool
+        isInPlaceMode: PropTypes.bool,
     };
 
     componentWillReceiveProps(nextProps) {
@@ -65,7 +66,7 @@ export default class extends React.Component {
         const {
             fadeDurationInMs,
             isActive,
-            isPositionOutside
+            isPositionOutside,
         } = this.props;
         const willIsActiveChange = isActive !== nextProps.isActive;
         const willIsPositionOutsideChange = isPositionOutside !== nextProps.isPositionOutside;
@@ -77,25 +78,25 @@ export default class extends React.Component {
         if (nextProps.isActive && !nextProps.isPositionOutside) {
             this.setState({
                 isTrainsitionDone: false,
-                isTransitionEntering: true
+                isTransitionEntering: true,
             });
 
             this.timers.push(setTimeout(() => {
                 this.setState({
                     isTransitionEntering: false,
-                    isTransitionActive: true
+                    isTransitionActive: true,
                 });
             }, 0));
         } else {
             this.setState({
                 isTransitionLeaving: true,
-                isTransitionActive: false
+                isTransitionActive: false,
             });
 
             this.timers.push(setTimeout(() => {
                 this.setState({
                     isTransitionDone: true,
-                    isTransitionLeaving: false
+                    isTransitionLeaving: false,
                 });
             }, fadeDurationInMs));
         }
@@ -108,14 +109,14 @@ export default class extends React.Component {
             containerDimensions,
             position,
             smallImage,
-            isInPlaceMode
+            isInPlaceMode,
         } = this.props;
 
         if (isInPlaceMode) {
             return getInPlaceEnlargedImageCoordinates({
                 containerDimensions,
                 largeImage,
-                position
+                position,
             });
         }
 
@@ -124,7 +125,7 @@ export default class extends React.Component {
             cursorOffset,
             largeImage,
             position,
-            smallImage
+            smallImage,
         });
     }
 
@@ -132,7 +133,7 @@ export default class extends React.Component {
         const {
             isTransitionEntering,
             isTransitionActive,
-            isTransitionLeaving
+            isTransitionLeaving,
         } = this.state;
 
         return (
@@ -148,10 +149,11 @@ export default class extends React.Component {
             containerDimensions,
             fadeDurationInMs,
             isPortalRendered,
-            isInPlaceMode
+            enlargedImageOrientation,
+            isInPlaceMode,
         } = this.props;
 
-        const { isTransitionActive } = this.state;
+        const {isTransitionActive} = this.state;
 
         return getEnlargedImageContainerStyle({
             containerDimensions,
@@ -159,20 +161,21 @@ export default class extends React.Component {
             fadeDurationInMs,
             isTransitionActive,
             isInPlaceMode,
-            isPortalRendered
+            isPortalRendered,
+            enlargedImageOrientation,
         });
     }
 
     get imageStyle() {
         const {
             imageStyle,
-            largeImage
+            largeImage,
         } = this.props;
 
         return getEnlargedImageStyle({
             imageCoordinates: this.getImageCoordinates(),
             imageStyle,
-            largeImage
+            largeImage,
         });
     }
 
@@ -185,16 +188,16 @@ export default class extends React.Component {
             largeImage: {
                 alt = '',
                 onLoad = noop,
-                onError = noop
+                onError = noop,
             },
         } = this.props;
 
         const component = (
-            <div { ...{
+            <div {...{
                 className: containerClassName,
-                style: this.containerStyle
+                style: this.containerStyle,
             }}>
-                <img { ...{
+                <img {...{
                     alt,
                     className: imageClassName,
                     src: largeImage.src,
@@ -202,7 +205,7 @@ export default class extends React.Component {
                     sizes: largeImage.sizes,
                     style: this.imageStyle,
                     onLoad,
-                    onError
+                    onError,
                 }}/>
             </div>
         );
